@@ -27,9 +27,9 @@ pipeline {
                     sh """
                         docker build \
                             -f Docker/Dockerfile \
-                            -t $dockerHubRepo:$GIT_BRANCH-latest \
-                            -t $dockerHubRepo:$GIT_BRANCH-$BUILD_ID \
-                            -t $dockerHubRepo:$GIT_BRANCH-$GIT_COMMIT \
+                            -t $dockerHubRepo:latest \
+                            -t $dockerHubRepo:$BUILD_ID \
+                            -t $dockerHubRepo:$GIT_COMMIT \
                             .
                     """
                     echo "Building docker image finish"
@@ -49,9 +49,9 @@ pipeline {
 
                         docker login --username $USERNAME_DOCKER_HUB --password $PASSWORD_DOCKER_HUB
 
-                        docker push $dockerHubRepo:$GIT_BRANCH-latest
-                        docker push $dockerHubRepo:$GIT_BRANCH-$BUILD_ID
-                        docker push $dockerHubRepo:$GIT_BRANCH-$GIT_COMMIT
+                        docker push $dockerHubRepo:latest
+                        docker push $dockerHubRepo:$BUILD_ID
+                        docker push $dockerHubRepo:$GIT_COMMIT
                     
                     """
                 
@@ -62,9 +62,9 @@ pipeline {
         stage('Clean up') {
             steps {
                 sh """
-                    docker rmi $dockerHubRepo:$GIT_BRANCH-latest
-                    docker rmi $dockerHubRepo:$GIT_BRANCH-$BUILD_ID
-                    docker rmi $dockerHubRepo:$GIT_BRANCH-$GIT_COMMIT
+                    docker rmi $dockerHubRepo:latest
+                    docker rmi $dockerHubRepo:$BUILD_ID
+                    docker rmi $dockerHubRepo:$GIT_COMMIT
                 """
             }
         }        
